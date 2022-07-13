@@ -1,9 +1,11 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\V1\CustomerController\Authentication;
 use App\Http\Controllers\V1\SystemController\AuthenticationController;
 use App\Http\Controllers\V1\SystemController\SystemApiController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\V1\ClientController\ClientApiController;
 
 
 /*
@@ -31,5 +33,15 @@ Route::group(['prefix' => 'v1/admin', 'as' => 'v1/admin'], function () {
 });
 
 Route::group(['prefix' => 'v1', 'as' => 'v1'], function () {
+    // Send OTP
+    Route::post('sendOtp',[Authentication::class,'sendOtp']);
+
+    // clientRegistration
+    Route::post('clientRegister',[ClientApiController::class,'clientRegistration']);
+    Route::get('getClient',[ClientApiController::class,'getClient']);
+    Route::get('getClientId/{id}',[ClientApiController::class,'getClientById']);
+    Route::post('updateClient/{id}',[ClientApiController::class,'updateClient']);
+    Route::delete('deleteClient/{id}',[ClientApiController::class,'deleteClient']);
+
 
 });

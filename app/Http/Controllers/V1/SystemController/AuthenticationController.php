@@ -18,6 +18,7 @@ class AuthenticationController extends Controller
                 'mobile_no'=>'required | numeric |unique:users,mobile_no| digits:10 ',
                 'email'=>'required | regex:/(.+)@(.+)\.(.+)/i |unique:users,email',
                 'password' => 'required|string|min:6|confirmed',
+                'user_type'=>' '
             ]);
             if($validator->fails())
             {
@@ -27,8 +28,9 @@ class AuthenticationController extends Controller
                 $user->email= $request->email;
                 $user->name=$request->name;
                 $user->mobile_no= $request->mobile_no;
+                $user->user_type= 'system';
                 $user ->password = bcrypt($request->password);
-                                       
+                        
                 $user->save();
                 $token = JWTAuth::fromUser($user);
                 $response = ['token' => $token];
