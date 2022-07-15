@@ -1,19 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\V1\SystemController;
+namespace App\Http\Controllers\V1\RestaurantController;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use PhpParser\Node\Stmt\Function_;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
-class SystemApiController extends Controller
+class RestaurantApiController extends Controller
 {
-
+    
     // Create User
-    public function createUser(Request $request){
+    public function createRestaurantUser(Request $request){
         try{
             $validator=Validator::make($request->all(),[
                 'name'=>'required',
@@ -29,7 +28,7 @@ class SystemApiController extends Controller
                 $newUser->name= $request->name;
                 $newUser->email= $request->email;
                 $newUser->mobile_no= $request->mobile_no;
-                $newUser->user_type= 'system';
+                $newUser->user_type= 'restaurant';
                 $newUser->client_id= $request->client_id;
 
                 $newUser->save();
@@ -44,9 +43,9 @@ class SystemApiController extends Controller
 
 
     // get all User
-    public function getUser(){
-        $getUser = DB::table('users')->where('user_type', 'system')->get();
-        $count= DB::table('users')->where('user_type', 'system')->count();
+    public function getRestaurantUser(){
+        $getUser = DB::table('users')->where('user_type', 'Restaurant')->get();
+        $count= DB::table('users')->where('user_type', 'Restaurant')->count();
         try{
             if($count==0){
                 return $this->sendResponse('',"No User Available..!",false,'');
@@ -61,7 +60,7 @@ class SystemApiController extends Controller
     }
 
     // delete user
-public function  deleteUser(Request $request ,$id){
+public function  deleteRestaurantUser(Request $request ,$id){
     try{
         $getUser= User::find($id);
         if(is_null($getUser)){

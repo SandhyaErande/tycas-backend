@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\V1\SystemController;
+namespace App\Http\Controllers\V1\UserController;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -11,37 +11,37 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthenticationController extends Controller
 {
-    public function registration(Request $request){
-        try{
-            $validator= Validator::make($request->all(),[
-                'name'=>'required',
-                'mobile_no'=>'required | numeric |unique:users,mobile_no| digits:10 ',
-                'email'=>'required | regex:/(.+)@(.+)\.(.+)/i |unique:users,email',
-                'password' => 'required|string|min:6|confirmed',
-                'user_type'=>' '
-            ]);
-            if($validator->fails())
-            {
-                return response()->json($validator->errors(),404);
-            }
-            $user=new User;
-                $user->email= $request->email;
-                $user->name=$request->name;
-                $user->mobile_no= $request->mobile_no;
-                $user->user_type= 'system';
-                $user ->password = bcrypt($request->password);
+    // public function registration(Request $request){
+    //     try{
+    //         $validator= Validator::make($request->all(),[
+    //             'name'=>'required',
+    //             'mobile_no'=>'required | numeric |unique:users,mobile_no| digits:10 ',
+    //             'email'=>'required | regex:/(.+)@(.+)\.(.+)/i |unique:users,email',
+    //             'password' => 'required|string|min:6|confirmed',
+    //             'user_type'=>' '
+    //         ]);
+    //         if($validator->fails())
+    //         {
+    //             return response()->json($validator->errors(),404);
+    //         }
+    //         $user=new User;
+    //             $user->email= $request->email;
+    //             $user->name=$request->name;
+    //             $user->mobile_no= $request->mobile_no;
+    //             $user->user_type= 'system';
+    //             $user ->password = bcrypt($request->password);
                         
-                $user->save();
-                $token = JWTAuth::fromUser($user);
-                $response = ['token' => $token];
-                $response['userData'] = $user;
+    //             $user->save();
+    //             $token = JWTAuth::fromUser($user);
+    //             $response = ['token' => $token];
+    //             $response['userData'] = $user;
                
-                 return $this->sendResponse($response,"Registration Successfully..!",true);
-        }
-        catch(\Exception $e){
-            return $this->sendError('Something Went Wrong..!',$e,412);
-        }
-    }
+    //              return $this->sendResponse($response,"Registration Successfully..!",true);
+    //     }
+    //     catch(\Exception $e){
+    //         return $this->sendError('Something Went Wrong..!',$e,412);
+    //     }
+    // }
     public function login(Request $request){
         try{
             $validator = Validator::make($request->all(), [

@@ -1,11 +1,12 @@
 <?php
 
 use App\Http\Controllers\V1\CustomerController\Authentication;
-use App\Http\Controllers\V1\SystemController\AuthenticationController;
-use App\Http\Controllers\V1\SystemController\SystemApiController;
+use App\Http\Controllers\V1\UserController\AuthenticationController;
+use App\Http\Controllers\V1\UserController\UserApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\V1\ClientController\ClientApiController;
+use App\Http\Controllers\V1\UserController\ClientApiController;
+use App\Http\Controllers\V1\RestaurantController\RestaurantApiController;
 
 
 /*
@@ -26,15 +27,16 @@ Route::group(['prefix' => 'v1/admin', 'as' => 'v1/admin'], function () {
     Route::post('register',[AuthenticationController::class,'registration']);
     Route::post('login',[AuthenticationController::class,'login']);
 
-    // create user
-    Route::post('createUser',[SystemApiController::class,'createUser']);
-    Route::get('getUser',[SystemApiController::class,'getUser']);
-    Route::delete('deleteUser/{id}',[SystemApiController::class,'deleteUser']);
+    // for System user
+    Route::post('createSystemUser',[UserApiController::class,'createSystemUser']);
+    Route::get('getSystemUser',[UserApiController::class,'getSystemUser']);
+    Route::delete('deleteSystemUser/{id}',[UserApiController::class,'deleteSystemUser']);
 });
 
 Route::group(['prefix' => 'v1', 'as' => 'v1'], function () {
     // Send OTP
     Route::post('sendOtp',[Authentication::class,'sendOtp']);
+    Route::post('verifyOtp',[Authentication::class,'verifyOtp']);
 
     // clientRegistration
     Route::post('clientRegister',[ClientApiController::class,'clientRegistration']);
@@ -44,4 +46,8 @@ Route::group(['prefix' => 'v1', 'as' => 'v1'], function () {
     Route::delete('deleteClient/{id}',[ClientApiController::class,'deleteClient']);
 
 
+    // for Restaurant user
+    Route::post('createRestaurantUser',[RestaurantApiController::class,'createRestaurantUser']);
+    Route::get('getRestaurantUser',[RestaurantApiController::class,'getRestaurantUser']);
+    Route::delete('deleteRestaurantUser/{id}',[RestaurantApiController::class,'deleteRestaurantUser']);
 });
