@@ -64,6 +64,7 @@ class UserApiController extends Controller
 public function deleteSystemUser(Request $request ,$id){
     try{
         $getUser= User::find($id);
+        
         if(is_null($getUser)){
             return $this->sendResponse([],'No User Found',false);
         }
@@ -72,6 +73,80 @@ public function deleteSystemUser(Request $request ,$id){
         }
         else{
             return $this->sendResponse([],'User Not Deleted',false);
+        }
+    }
+    catch(\Exception $e){
+        return $this->sendError("Operation Failed",$e,413);
+    }
+}
+
+// get User only trash
+public function getTrashSystemUser()
+{
+    try{
+        $getUser=User::onlyTrashed()->get();
+        $count=User::onlyTrashed()->count();
+
+        if(is_null($getUser)){
+            return $this->sendResponse([],'No User Found',false);
+        }
+        else{
+            return $this->sendResponse(['User'=>$getUser,'Count'=>$count] ,"Data Fetched Successfully..!",true);
+        }
+    }
+    catch(\Exception $e){
+        return $this->sendError("Operation Failed",$e,413);
+    }
+}
+// get User with trash
+public function getSystemUserWithTrash()
+{
+    try{
+        $getUser=User::withTrashed()->get();
+        $count=User::withTrashed()->count();
+
+        if(is_null($getUser)){
+            return $this->sendResponse([],'No User Found',false);
+        }
+        else{
+            return $this->sendResponse(['User'=>$getUser,'Count'=>$count] ,"Data Fetched Successfully..!",true);
+        }
+    }
+    catch(\Exception $e){
+        return $this->sendError("Operation Failed",$e,413);
+    }
+}
+
+// Restore User
+public function  restoreSystemUser(Request $request ,$id){
+    try{
+        $getUser= User::onlyTrashed()->find($id);
+        if(is_null($getUser)){
+            return $this->sendResponse([],'No CliUsernt Found',false);
+        }
+        if($getUser->Restore()){
+            return $this->sendResponse([],'User Restore Successfully..!');
+        }
+        else{
+            return $this->sendResponse([],'User Cant Restore',false);
+        }
+    }
+    catch(\Exception $e){
+        return $this->sendError("Operation Failed",$e,413);
+    }
+}
+// User Delete permanent 
+public function  deleteSystemUserpermanent(Request $request ,$id){
+    try{
+        $getUser= User::withTrashed()->find($id);
+        if(is_null($getUser)){
+            return $this->sendResponse([],'No User Found',false);
+        }
+        if($getUser->forceDelete()){
+            return $this->sendResponse([],'User Deleted Permanent..!');
+        }
+        else{
+            return $this->sendResponse([],'User Cant Restore',false);
         }
     }
     catch(\Exception $e){

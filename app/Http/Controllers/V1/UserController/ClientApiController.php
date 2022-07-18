@@ -153,4 +153,79 @@ public function updateClient(Request $request,$id){
         return $this->sendError("Operation Failed",$e,413);
     }
 }
+// soft delete
+
+// get client only trash
+public function getTrashClient()
+{
+    try{
+        $getClient=Client::onlyTrashed()->get();
+        $count=Client::onlyTrashed()->count();
+
+        if(is_null($getClient)){
+            return $this->sendResponse([],'No Client Found',false);
+        }
+        else{
+            return $this->sendResponse(['Client'=>$getClient,'Count'=>$count] ,"Data Fetched Successfully..!",true);
+        }
+    }
+    catch(\Exception $e){
+        return $this->sendError("Operation Failed",$e,413);
+    }
+}
+// get client with trash
+public function getClientWithTrash()
+{
+    try{
+        $getClient=Client::withTrashed()->get();
+        $count=Client::withTrashed()->count();
+
+        if(is_null($getClient)){
+            return $this->sendResponse([],'No Client Found',false);
+        }
+        else{
+            return $this->sendResponse(['Client'=>$getClient,'Count'=>$count] ,"Data Fetched Successfully..!",true);
+        }
+    }
+    catch(\Exception $e){
+        return $this->sendError("Operation Failed",$e,413);
+    }
+}
+
+// Restore Client
+public function restoreClient(Request $request ,$id){
+    try{
+        $getClient= Client::onlyTrashed()->find($id);
+        if(is_null($getClient)){
+            return $this->sendResponse([],'No Client Found',false);
+        }
+        if($getClient->Restore()){
+            return $this->sendResponse([],'Client Restore Successfully..!');
+        }
+        else{
+            return $this->sendResponse([],'Client Cant Restore',false);
+        }
+    }
+    catch(\Exception $e){
+        return $this->sendError("Operation Failed",$e,413);
+    }
+}
+// Client Delete permanent 
+public function  deleteClientpermanent(Request $request ,$id){
+    try{
+        $getClient= Client::withTrashed()->find($id);
+        if(is_null($getClient)){
+            return $this->sendResponse([],'No Client Found',false);
+        }
+        if($getClient->forceDelete()){
+            return $this->sendResponse([],'Client Deleted Permanent..!');
+        }
+        else{
+            return $this->sendResponse([],'Client Cant Restore',false);
+        }
+    }
+    catch(\Exception $e){
+        return $this->sendError("Operation Failed",$e,413);
+    }
+}
 }

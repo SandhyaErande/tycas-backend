@@ -24,7 +24,7 @@ class User extends Authenticatable implements JWTSubject
         'name',
         'email',
         'password',
-        'softDeletes ',
+        'softDeletes',
         'mobile_no',
         'user_type',
         'client_id'
